@@ -5,7 +5,8 @@
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
 #TO DO###
-#make it not use cat to put at top of file
+#Make it work outside of home directory, make it not use cat to put at top of file
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
@@ -32,13 +33,38 @@ else
 	echo "is $USR your correct username?"
 fi
 
-echo "what is your repo name?"
-read REPO
 
-echo "remember your password? ;)"
+
+
+
+
+echo "What is your repo named?"
+read -r REPO
+
+echo "remember your password?"
 read -rs PW2
+
+echo "do you want to add all the files in your directory ($PWD) to be edited?"
+echo "y for all files in ($PWD). If not type in file name"
+read -r UPDATEE
+
+	if [ "$UPDATEE" = "y" ]; then
+	git add *
+else
+	git add $UPDATEE
+	fi
+
+
+
 UNENCGTOK=$(echo $GTOK | openssl aes-256-cbc -d -a -pass pass:$PW2 -pbkdf2)
+
+echo "what would you like your commit message to be?"
+read -r MESSAGE
+
+
+
+git commit -m "$MESSAGE"
 
 git push https://$UNENCGTOK@github.com/$USR/$REPO.git
 
-#e
+#
