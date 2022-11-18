@@ -1,6 +1,2 @@
-# Cool Stuff
-for https
-https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04
-
-compositor
-https://github.com/vaxerski/Hyprland/wiki/Installation
+My favorite scripts ive made over the while.
+Best right now is probably my githubpush script that stores your token 256b encrypted so you only need to put in your password.
