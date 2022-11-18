@@ -49,9 +49,9 @@ echo "y for all files in ($PWD). If not type in file name"
 read -r UPDATEE
 
 	if [ "$UPDATEE" = "y" ]; then
-	git add *
+	git add $PWD/*
 else
-	git add $UPDATEE
+	git add $PWD/$UPDATEE
 	fi
 
 
