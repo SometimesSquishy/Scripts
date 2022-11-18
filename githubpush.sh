@@ -8,7 +8,6 @@
 #Make it work outside of home directory, make it not use cat to put at top of file
 
 
-USR=sometimessquishy
 
 if [[ -z "$GTOK" ]]; then
 	echo "what is your github token?"
