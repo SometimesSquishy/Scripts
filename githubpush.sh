@@ -5,8 +5,8 @@
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
 #TO DO###
-#Make it work outside of home directory, make it not use cat to put at top of file
-
+#make it not use cat to put at top of file
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
 if [[ -z "$GTOK" ]]; then
@@ -18,8 +18,8 @@ if [[ -z "$GTOK" ]]; then
 
 	GTOKENC=$(echo $GTOKEN | openssl aes-256-cbc -a -salt -pass pass:$PASSWD -pbkdf2)
 
-	echo -n "GTOK="$GTOKENC"" | sed 's/[[:space:]]//g' | cat -s - ~/githubpush.sh > temp && mv temp githubpush.sh
-	chmod +x ~/githubpush.sh
+	echo -n "GTOK="$GTOKENC"" | sed 's/[[:space:]]//g' | cat -s - $SCRIPT_DIR/githubpush.sh > temp && mv temp githubpush.sh
+	chmod +x $SCRIPT_DIR/githubpush.sh
 	exit
 fi
 
@@ -27,7 +27,7 @@ if [[ -z "$USR"  ]]; then
 	echo "what is your user name?"
 	read -r USR
 	echo $USR
-	sed  -i "1i USR=$USR" ~/githubpush.sh
+	sed  -i "1i USR=$USR" $SCRIPT_DIR/githubpush.sh
 else
 	echo "is $USR your correct username?"
 fi
