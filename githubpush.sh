@@ -4,6 +4,9 @@
 
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
+#TO DO###
+#Make it work outside of home directory, make it not use cat to put at top of file
+
 
 USR=sometimessquishy
 
