@@ -1,3 +1,8 @@
+GTOK=U2FsdGVkX1+KUmNRBbeT8y/W5z50/QQM3AmXZ+kIF6L2XLeXgip9ozGkFa0dBKXRE4VQaFQ08lR1oqwq9gS44A==
+
+
+
+
 
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
@@ -6,7 +11,7 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-
+USR=sometimessquishy
 
 
 if [[ -z "$GTOK" ]]; then
@@ -34,8 +39,15 @@ else
 	echo "is $USR your correct username?"
 fi
 
+if [[ -z "$GPG" ]]; then
+	echo "would you like to make a gpg key to sign your update things?"
+	read -r GPGYN
 
-
+	if [[ "$GPGYN" = "y" ]]; then
+		#gpg --generate-key
+	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
+	fi
+fi
 
 
 
