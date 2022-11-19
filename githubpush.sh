@@ -52,7 +52,7 @@ if [[ -z "$GPG" ]]; then
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
 
-	PUBGPG=$(gpg --armor --export 2621838FD499A791 > gpgkey.asc; cat gpgkey.asc; rm gpgkey.asc)
+	PUBGPG=$(gpg --armor --export $POSSGPG > gpgkey.asc; cat gpgkey.asc; rm gpgkey.asc)
 	echo "your key is:\n$PUBGPG"
 
 	fi
