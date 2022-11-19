@@ -43,7 +43,7 @@ if [[ -z "$GPG" ]]; then
 	echo "would you like to make a gpg key to sign your update things?"
 	read -r GPGYN
 
-	if [[ "$GPGYN" = "y" ]]; then
+	if [[ -z "$GPGYN" ]]; then
 		#gpg --generate-key
 	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
 	sed -i "1i GPGYN=$POSSGPG" $SCRIPT_DIR/githubpush.sh
@@ -51,8 +51,7 @@ if [[ -z "$GPG" ]]; then
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
 
-	PUBGPG=$(gpg --armor --export $POSSGPG > gpgkey.asc; cat gpgkey.asc; rm gpgkey.asc)
-	echo "your key is:\n$PUBGPG"
+	PUBGPG=$(gpg --armor --export $POSSGPG); echo "Your GPG key is:\n $PUBGPG"
 
 	fi
 fi
