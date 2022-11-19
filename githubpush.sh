@@ -1,13 +1,12 @@
 
-
-
-
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
 #TO DO###
 #Make it work outside of home directory, make it not use cat to put at top of file
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+
 
 
 if [[ -z "$GTOK" ]]; then
@@ -24,6 +23,8 @@ if [[ -z "$GTOK" ]]; then
 	exit
 fi
 
+
+
 if [[ -z "$USR"  ]]; then
 	echo "what is your user name?"
 	read -r USR
@@ -38,8 +39,23 @@ fi
 
 
 
-echo "What is your repo named?"
-read -r REPO
+#echo "What is your repo named?"
+#read -r REPO
+
+REPO=$(basename $PWD)
+
+echo "is $REPO youre repository? press n if no."
+read -r REPOSI
+
+
+if [[ "$REPOSI" = "n" ]]; then
+	echo "go to your dir you want to push then."
+	exit
+fi
+
+
+
+
 
 echo "remember your password?"
 read -rs PW2
@@ -49,9 +65,9 @@ echo "y for all files in ($PWD). If not type in file name"
 read -r UPDATEE
 
 	if [ "$UPDATEE" = "y" ]; then
-	git add $PWD/*
+	git add *
 else
-	git add $PWD/$UPDATEE
+	git add $UPDATEE
 	fi
 
 
