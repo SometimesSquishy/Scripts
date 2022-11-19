@@ -91,7 +91,7 @@ read -r MESSAGE
 
 
 
-git commit -m "$MESSAGE"
+git commit -S -m "$MESSAGE"
 
 git push https://$UNENCGTOK@github.com/$USR/$REPO.git
 
