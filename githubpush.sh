@@ -1,3 +1,4 @@
+GPGYN=2621838FD499A791
 GTOK=U2FsdGVkX1+KUmNRBbeT8y/W5z50/QQM3AmXZ+kIF6L2XLeXgip9ozGkFa0dBKXRE4VQaFQ08lR1oqwq9gS44A==
 
 
@@ -46,6 +47,14 @@ if [[ -z "$GPG" ]]; then
 	if [[ "$GPGYN" = "y" ]]; then
 		#gpg --generate-key
 	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
+	sed -i "1i GPGYN=$POSSGPG" $SCRIPT_DIR/githubpush.sh
+
+	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
+
+
+	PUBGPG=$(gpg --armor --export 2621838FD499A791 > gpgkey.asc; cat gpgkey.asc; rm gpgkey.asc)
+	echo "your key is:\n$PUBGPG"
+
 	fi
 fi
 
