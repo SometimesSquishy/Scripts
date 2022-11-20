@@ -44,7 +44,7 @@ fi
 
 
 
-# Creating GPG pair to sign on uploads, then saving private key in file.
+# Creating GPG pair to sign on uploads then (not) saving it to file as no need to do that
 if [ -z "$GPG" ]; then
 	echo -e "would you like to make a gpg key to sign your update things \nThis will require you to open a web browser window \nif yes then press enter"
 	read -r GPGYN
@@ -54,15 +54,19 @@ if [ -z "$GPG" ]; then
 		read -r GPGGENKEYYY
 
 			if [ "GPGGENKEYY" = "y" ]; then
-		gpg --generate-key
-			else
+				#generating gpg key
+				echo "follow these steps"
+				gpg --generate-key
+	else
+	#Taking your gpg you created or not and setting it as your global key on git
 
 	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
-	sed -i "1i GPG=$POSSGPG" $SCRIPT_DIR/githubpush.sh
+	#putting a random text into $GPG to no longer ask you for the key
+	sed -i "1i GPG=zinga" $SCRIPT_DIR/githubpush.sh
 
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
-
+	#telling you what your pub gpg key for the already set global git gpg key.
 	PUBGPG=$(gpg --armor --export $POSSGPG); echo-e "Your GPG key is: \n$PUBGPG"
 			fi
 		fi
@@ -76,7 +80,6 @@ REPO=$(basename $PWD)
 echo "is $REPO your repository? press n if no."
 read -r REPOSI
 
-
 if [ "$REPOSI" = "n" ]; then
 	echo "go to the dir you want to push then."
 	exit
@@ -84,11 +87,9 @@ fi
 
 
 
-
 # grabbing password to decrypt your stored github token ($GTOK).
 echo "remember your password?"
 read -rs PW2
-
 UNENCGTOK=$(echo $GTOK | openssl aes-256-cbc -d -a -pass pass:$PW2 -pbkdf2)
 
 
