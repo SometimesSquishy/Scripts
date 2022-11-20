@@ -9,9 +9,9 @@
 #TO DO###
 #Make it work outside of home directory, make it not use cat to put at top of file
 
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-USR=sometimessquishy
 
 
 if [[ -z "$GTOK" ]]; then
