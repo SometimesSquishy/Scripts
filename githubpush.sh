@@ -15,7 +15,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
 # Pulling github token, then 256b encrypting it to be stored.
-if [[ -z "$GTOK" ]]; then
+if [ -z "$GTOK" ]; then
 	echo "what is your github token?"
 	read -rs GTOKEN
 
@@ -33,7 +33,7 @@ fi
 
 
 # Grabbing user name, and then saving it
-if [[ -z "$USR"  ]]; then
+if [ -z "$USR"  ]; then
 	echo "what is your user name?"
 	read -r USR
 	echo $USR
@@ -45,40 +45,39 @@ fi
 
 
 # Creating GPG pair to sign on uploads, then saving private key in file.
-if [[ -z "$GPG" ]]; then
+if [ -z "$GPG" ]; then
 	echo -e "would you like to make a gpg key to sign your update things \nThis will require you to open a web browser window \nif yes then press enter"
 	read -r GPGYN
 
-	if [[ -z "$GPGYN" ]]; then
+	if [ -z "$GPGYN" ]; then
 		echo "do you need to create a gpg key? y for yes, enter for no."
 		read -r GPGGENKEYYY
 
-			if [[ "GPGGENKEYY" = "y" ]]; then
+			if [ "GPGGENKEYY" = "y" ]; then
 		gpg --generate-key
 			else
 
 	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
-	sed -i "1i GPGYN=$POSSGPG" $SCRIPT_DIR/githubpush.sh
+	sed -i "1i GPG=$POSSGPG" $SCRIPT_DIR/githubpush.sh
 
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
 
-	PUBGPG=$(gpg --armor --export $POSSGPG); echo "Your GPG key is:\n $PUBGPG"
-
+	PUBGPG=$(gpg --armor --export $POSSGPG); echo-e "Your GPG key is: \n$PUBGPG"
+			fi
+		fi
 	fi
-fi
 
-fi
 
 # Grabbing repo name through using just the base name of the directory you are in.
 # Will work great as long as you dont rename your repo.
 REPO=$(basename $PWD)
 
-echo "is $REPO youre repository? press n if no."
+echo "is $REPO your repository? press n if no."
 read -r REPOSI
 
 
-if [[ "$REPOSI" = "n" ]]; then
+if [ "$REPOSI" = "n" ]; then
 	echo "go to the dir you want to push then."
 	exit
 fi
