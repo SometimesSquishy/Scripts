@@ -1,18 +1,26 @@
-
-
-
-
+GPG=zinga
+USR=
+GTOK=U2FsdGVkX18iUIarUgPnVytASZCC3OijZI7+Nw6WMhM=
 
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
 #TO DO###
 #make it not use cat to put at top of file
 
-
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-
-
+if [ "$1" = "-h" ]; then
+	echo -e "-i	initiate a new git repository \n-r	reset your credentials"
+fi
+if [ "$1" = "-i" ]; then
+	echo "initializing your git project"
+	git init
+fi
+if [ "$1" = "-r" ]; then
+	echo "wiping your credentials (as long as they are still at the top of your folder!"
+	sed -i '1,4d' $SCRIPT_DIR/githubpush.sh
+	sed -i '1 i\\n\n\n' $SCRIPT_DIR/githubpush.sh
+fi
 
 # Pulling github token, then 256b encrypting it to be stored.
 if [ -z "$GTOK" ]; then
@@ -29,9 +37,6 @@ if [ -z "$GTOK" ]; then
 	exit
 fi
 
-
-
-
 # Grabbing user name, and then saving it
 if [ -z "$USR"  ]; then
 	echo "what is your user name?"
@@ -41,8 +46,6 @@ if [ -z "$USR"  ]; then
 else
 	echo "is $USR your correct username?"
 fi
-
-
 
 # Creating GPG pair to sign on uploads then (not) saving it to file as no need to do that
 if [ -z "$GPG" ]; then
@@ -67,11 +70,10 @@ if [ -z "$GPG" ]; then
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
 	#telling you what your pub gpg key for the already set global git gpg key.
-	PUBGPG=$(gpg --armor --export $POSSGPG); echo-e "Your GPG key is: \n$PUBGPG"
+	PUBGPG=$(gpg --armor --export $POSSGPG); echo -e "Your GPG key is: \n$PUBGPG"
 			fi
 		fi
 	fi
-
 
 # Grabbing repo name through using just the base name of the directory you are in.
 # Will work great as long as you dont rename your repo.
@@ -85,14 +87,10 @@ if [ "$REPOSI" = "n" ]; then
 	exit
 fi
 
-
-
 # grabbing password to decrypt your stored github token ($GTOK).
 echo "remember your password?"
 read -rs PW2
 UNENCGTOK=$(echo $GTOK | openssl aes-256-cbc -d -a -pass pass:$PW2 -pbkdf2)
-
-
 
 # selecting files to be pushed
 echo -e "do you want to add all the files in your directory ($PWD) to be edited?
@@ -105,18 +103,13 @@ else
 	git add $UPDATEE
 	fi
 
-
-
 # setting the commit message
 echo "what would you like your commit message to be?"
 read -r MESSAGE
 
 git commit -S -m "$MESSAGE"
 
-
-
 #and finally pushing to github
 git push https://$UNENCGTOK@github.com/$USR/$REPO.git
-
 
 #
