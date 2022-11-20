@@ -82,14 +82,14 @@ read -r REPOSI
 
 
 if [[ "$REPOSI" = "n" ]]; then
-	echo "go to your dir you want to push then."
+	echo "go to the dir you want to push then."
 	exit
 fi
 
 
 
 
-# grabbing password to decrypt your github token.
+# grabbing password to decrypt your stored github token ($GTOK).
 echo "remember your password?"
 read -rs PW2
 
@@ -98,8 +98,8 @@ UNENCGTOK=$(echo $GTOK | openssl aes-256-cbc -d -a -pass pass:$PW2 -pbkdf2)
 
 
 # selecting files to be pushed
-echo "do you want to add all the files in your directory ($PWD) to be edited?"
-echo " >> y << for all files in ($PWD). If not type in file name"
+echo -e "do you want to add all the files in your directory ($PWD) to be edited?
+\n>> y << for all files in ($PWD). If not type in file name"
 read -r UPDATEE
 
 	if [ "$UPDATEE" = "y" ]; then
