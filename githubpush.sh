@@ -1,4 +1,6 @@
-
+GPGYN=2621838FD499A791
+GTOK=U2FsdGVkX1+KUmNRBbeT8y/W5z50/QQM3AmXZ+kIF6L2XLeXgip9ozGkFa0dBKXRE4VQaFQ08lR1oqwq9gS44A==
+USR=sometimessquishy
 
 
 
@@ -47,9 +49,7 @@ fi
 
 # Creating GPG pair to sign on uploads, then saving private key in file.
 if [[ -z "$GPG" ]]; then
-	echo "would you like to make a gpg key to sign your update things?"
-	echo "This will require you to open a web browser window"
-	echo "if yes then press enter"
+	echo -e "would you like to make a gpg key to sign your update things \nThis will require you to open a web browser window \nif yes then press enter"
 	read -r GPGYN
 
 	if [[ -z "$GPGYN" ]]; then
@@ -71,7 +71,7 @@ if [[ -z "$GPG" ]]; then
 	fi
 fi
 
-
+fi
 
 # Grabbing repo name through using just the base name of the directory you are in.
 # Will work great as long as you dont rename your repo.
@@ -120,5 +120,6 @@ git commit -S -m "$MESSAGE"
 
 #and finally pushing to github
 git push https://$UNENCGTOK@github.com/$USR/$REPO.git
+
 
 #
