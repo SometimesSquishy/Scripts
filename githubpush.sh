@@ -1,11 +1,19 @@
-GPG=zinga
-USR=
-GTOK=U2FsdGVkX18iUIarUgPnVytASZCC3OijZI7+Nw6WMhM=
+
+
+
+
 
 #!/usr/bin/env bash
 #To run this go into your folder you want to push and then run the script
 #TO DO###
 #make it not use cat to put at top of file
+
+case "$OSTYPE" in
+	linux*) echo "linuxchads win again" ;;
+	darwin*) echo "run brew install gnu-sed to get the superior sed then swap out where you see sed to gsed." ;;
+	bsd*) echo "if you have over 50mB RAM used atm then unbloat your system" ;;
+	*) echo "what OS is $OSTYPE???" ;;
+esac
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
@@ -21,6 +29,8 @@ if [ "$1" = "-r" ]; then
 	sed -i '1,4d' $SCRIPT_DIR/githubpush.sh
 	sed -i '1 i\\n\n\n' $SCRIPT_DIR/githubpush.sh
 fi
+
+
 
 # Pulling github token, then 256b encrypting it to be stored.
 if [ -z "$GTOK" ]; then

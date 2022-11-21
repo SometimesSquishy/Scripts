@@ -18,7 +18,7 @@ echo $MP3OR4
 if [ "$MP3OR4" = "y" ]; then
       yt-dlp \
       --ignore-errors \
-        -P /storage/Music/$ARTIST/$ALBUM \
+        -P ~/Music/$ARTIST/$ALBUM \
         --format bestaudio \
         --extract-audio \
         --audio-format mp3 \
@@ -30,7 +30,7 @@ if [ "$MP3OR4" = "y" ]; then
 
 else
         yt-dlp \
-        -P /storage/Music/$ARTIST/$ALBUM \
+        -P ~/Music/$ARTIST/$ALBUM \
         --extract-audio \
         --embed-thumbnail \
         --format bestaudio \
@@ -39,4 +39,5 @@ else
         --cookies-from-browser firefox \
         $URL
 fi
-#e
+
+#
