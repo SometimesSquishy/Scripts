@@ -8,32 +8,49 @@
 #TO DO###
 #make it not use cat to put at top of file
 
-case "$OSTYPE" in
-	linux*) echo "linuxchads win again" ;;
-	darwin*) echo "run brew install gnu-sed to get the superior sed then swap out where you see sed to gsed." ;;
-	bsd*) echo "if you have over 50mB RAM used atm then unbloat your system" ;;
-	*) echo "what OS is $OSTYPE???" ;;
-esac
 
+
+
+# getting directory and name of script so it cna be renamed and put in near any directory
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_NAME=$( basename "$0" )
+SCRIPTA=$( echo "$SCRIPT_DIR/$SCRIPT_NAME" )
 
+
+# (-) commands
 if [ "$1" = "-h" ]; then
 	echo -e "-i	initiate a new git repository \n-r	reset your credentials"
+	exit
 fi
 if [ "$1" = "-i" ]; then
 	echo "initializing your git project"
 	git init
+	exit
 fi
 if [ "$1" = "-r" ]; then
 	echo "wiping your credentials (as long as they are still at the top of your folder!"
-	sed -i '1,4d' $SCRIPT_DIR/githubpush.sh
-	sed -i '1 i\\n\n\n' $SCRIPT_DIR/githubpush.sh
+	sed -ie '0,/GTOK/ s/GTOK[^ ]*//g' $SCRIPTA
+	sed -ie '0,/USR/ s/USR[^ ]*//g' $SCRIPTA
+	sed -ie '0,/GPG/ s/GPG[^ ]*//g' $SCRIPTA
+	sed -i '1 i\\n\n\n' $SCRIPTA
+	exit
 fi
 
 
 
 # Pulling github token, then 256b encrypting it to be stored.
+# also checking operating system to know if you need to make changes or smth
 if [ -z "$GTOK" ]; then
+
+	#just checking OS type to make sure scrip twill work
+	case "$OSTYPE" in
+        linux*) echo "linuxchads win again" ;;
+        darwin*) echo "run brew install gnu-sed to get the superior sed then edit the script to run using gsed." ;;
+        bsd*) echo "If you can install gnu-sed use it. Or, you could go through the script and change sed syntax" ;;
+        *) echo "what OS is $OSTYPE???" ;;
+esac
+
+
 	echo "what is your github token?"
 	read -rs GTOKEN
 
@@ -42,8 +59,8 @@ if [ -z "$GTOK" ]; then
 
 	GTOKENC=$(echo $GTOKEN | openssl aes-256-cbc -a -salt -pass pass:$PASSWD -pbkdf2)
 
-	echo -n "GTOK="$GTOKENC"" | sed 's/[[:space:]]//g' | cat -s - $SCRIPT_DIR/githubpush.sh > temp && mv temp $SCRIPT_DIR/githubpush.sh
-	chmod +x $SCRIPT_DIR/githubpush.sh
+	echo -n "GTOK="$GTOKENC"" | sed 's/[[:space:]]//g' | cat -s - $SCRIPTA > temp && mv temp $SCRIPTA
+	chmod +x $SCRIPTA
 	exit
 fi
 
@@ -52,7 +69,7 @@ if [ -z "$USR"  ]; then
 	echo "what is your user name?"
 	read -r USR
 	echo $USR
-	sed  -i "1i USR=$USR" $SCRIPT_DIR/githubpush.sh
+	sed  -i "1i USR=$USR" $SCRIPTA
 else
 	echo "is $USR your correct username?"
 fi
@@ -74,8 +91,9 @@ if [ -z "$GPG" ]; then
 	#Taking your gpg you created or not and setting it as your global key on git
 
 	POSSGPG=$(gpg --list-secret-keys --keyid-format=long | grep sec | awk -F'/' '{print $2}' | awk '{print $1}'); git config --global user.signingkey $POSSGPG; git config --global commit.gpgsign true
+
 	#putting a random text into $GPG to no longer ask you for the key
-	sed -i "1i GPG=zinga" $SCRIPT_DIR/githubpush.sh
+	sed -i "1i GPG=zinga" $SCRIPTA
 
 	echo "to make your things verified you need to go to https://github.com/settings/gpg/new and add your key."
 
@@ -93,6 +111,7 @@ echo "is $REPO your repository? press n if no."
 read -r REPOSI
 
 if [ "$REPOSI" = "n" ]; then
+	ls
 	echo "go to the dir you want to push then."
 	exit
 fi
